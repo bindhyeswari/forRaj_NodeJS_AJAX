@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>AJAX Call</title>
+    <style>
+
+    </style>
+    <script>
+        window.onload = function(){
+            var btn = document.getElementById('submit');
+            btn.onclick = function(){
+
+                var form = document.forms.person;
+                var json_data = {
+                    // hard coded
+                    name: form.name.value,
+                    email: form.email.value,
+                    city: form.city.value
+                };
+
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', '/person_submitted');
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.setRequestHeader('Accept-Content', 'application/json');
+                xhr.onreadystatechange = function(){
+                    if (xhr.readyState === 4) {
+
+                        if (xhr.status !== 200) {
+                            alert('There was an error: ' + xhr.statusText);
+                        } else {
+                            var obj = JSON.parse(xhr.responseText);
+                            console.log(obj);
+                            form.style.display = 'none';
+                        }
+                    }
+                };
+                xhr.send(JSON.stringify(json_data));
+
+            };
+
+
+
+        };
+    </script>
+</head>
+<body>
+
+<form name="person">
+    <input type="text" name="name"/>
+    <input type="text" name="email"/>
+    <input type="text" name="city"/>
+</form>
+
+<button id="submit">Submit Data</button>
+
+</body>
+</html>
